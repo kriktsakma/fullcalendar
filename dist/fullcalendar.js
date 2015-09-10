@@ -9541,7 +9541,7 @@ $.extend(AgendaView.prototype, {
 	// Refreshes the horizontal dimensions of the view
 	updateWidth: function() {
 		// make all axis cells line up, and record the width so newly created axis cells will have it
-		//this.axisWidth = matchCellWidths(this.el.find('.fc-axis'));
+		this.axisWidth = matchCellWidths(this.el.find('.fc-axis'));
 	},
 
 
