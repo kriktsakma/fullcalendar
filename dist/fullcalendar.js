@@ -6028,6 +6028,7 @@ $.extend(Grid.prototype, {
 		var skinCss = this.getEventSkinCss(annotation);
 		var timeHtml = '';
 		var titleHtml;
+		var serviceTitle;
 
 		// Only display a timed events time if it is the starting segment
 		if (!annotation.allDay && seg.isStart) {
@@ -6037,6 +6038,11 @@ $.extend(Grid.prototype, {
 		titleHtml =
 			'<span class="fc-title">' +
 				(htmlEscape(annotation.title || '') || '&nbsp;') + // we always want one line of height
+			'</span>';
+
+		serviceTitle =
+			'<span class="fc-serviceTitle">' +
+				(htmlEscape(annotation.service || '') || '&nbsp;') + // we always want one line of height
 			'</span>';
 
 		return '<a class="' + classes.join(' ') + '"' +
@@ -6051,8 +6057,8 @@ $.extend(Grid.prototype, {
 			'>' +
 				'<div class="fc-content">' +
 					(isRTL ?
-						titleHtml + ' ' + timeHtml : // put a natural space in between
-						timeHtml + ' ' + titleHtml   //
+						titleHtml + ' ' + timeHtml + ' ' + serviceTitle : // put a natural space in between
+						timeHtml + ' ' + titleHtml + ' ' + serviceTitle   //
 						) +
 				'</div></a>';
 	}
@@ -6477,6 +6483,7 @@ $.extend(DayGrid.prototype, {
 		var skinCss = this.getEventSkinCss(event);
 		var timeHtml = '';
 		var titleHtml;
+		var serviceTitle;
 
 		classes.unshift('fc-day-grid-event');
 
@@ -6488,6 +6495,11 @@ $.extend(DayGrid.prototype, {
 		titleHtml =
 			'<span class="fc-title">' +
 				(htmlEscape(event.title || '') || '&nbsp;') + // we always want one line of height
+			'</span>';
+
+		serviceTitle =
+			'<span class="fc-serviceTitle">' +
+				(htmlEscape(event.service || '') || '&nbsp;') + // we always want one line of height
 			'</span>';
 		
 		return '<a class="' + classes.join(' ') + '"' +
@@ -6502,8 +6514,8 @@ $.extend(DayGrid.prototype, {
 			'>' +
 				'<div class="fc-content">' +
 					(isRTL ?
-						titleHtml + ' ' + timeHtml : // put a natural space in between
-						timeHtml + ' ' + titleHtml   //
+						titleHtml + ' ' + timeHtml + ' ' + serviceTitle : // put a natural space in between
+						timeHtml + ' ' + titleHtml + ' ' + serviceTitle   //
 						) +
 				'</div>' +
 				(isResizable ?
@@ -7135,10 +7147,12 @@ $.extend(TimeGrid.prototype, {
 
 			axisHtml =
 				'<td class="fc-axis fc-time ' + view.widgetContentClass + '" ' + view.axisStyleAttr() + '>' +
-					((!slotNormal || !minutes) ? // if irregular slot duration, or on the hour, then display the time
-						'<span>' + // for matchCellWidths
-							htmlEscape(calendar.formatDate(slotDate, view.opt('axisFormat'))) +
-						'</span>' :
+					((!slotNormal || minutes === 0 || minutes === 30) ? // if irregular slot duration, or on the hour, then display the time
+						'<span class="hours">' + // for matchCellWidths
+							htmlEscape(calendar.formatDate(slotDate, view.opt('axisFormat')).substr(0, calendar.formatDate(slotDate, view.opt('axisFormat')).indexOf(":"))) +
+						'</span><span class="minutes">' + // for matchCellWidths
+							htmlEscape(calendar.formatDate(slotDate, view.opt('axisFormat')).substr(calendar.formatDate(slotDate, view.opt('axisFormat')).indexOf(":")).replace(":", " ")) +
+						'</span>':
 						''
 						) +
 				'</td>';
@@ -7657,6 +7671,12 @@ $.extend(TimeGrid.prototype, {
 					(event.title ?
 						'<div class="fc-title">' +
 							htmlEscape(event.title) +
+						'</div>' :
+						''
+						) +
+					(event.service ?
+						'<div class="fc-service">' +
+							htmlEscape(event.service) +
 						'</div>' :
 						''
 						) +
@@ -9536,7 +9556,7 @@ $.extend(AgendaView.prototype, {
 	// Refreshes the horizontal dimensions of the view
 	updateWidth: function() {
 		// make all axis cells line up, and record the width so newly created axis cells will have it
-		this.axisWidth = matchCellWidths(this.el.find('.fc-axis'));
+		//this.axisWidth = matchCellWidths(this.el.find('.fc-axis'));
 	},
 
 
