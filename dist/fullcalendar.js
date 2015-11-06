@@ -7649,28 +7649,30 @@ $.extend(TimeGrid.prototype, {
 				''
 				) +
 			'>' +
-				'<div class="fc-content">' +
-					(timeText ?
-						'<div class="fc-time"' +
-						' data-start="' + htmlEscape(startTimeText) + '"' +
-						' data-full="' + htmlEscape(fullTimeText) + '"' +
-						'>' +
-							'<span>' + htmlEscape(timeText) + '</span>' +
-						'</div>' :
+				'<div class="fc-custom-content" style="width:inherit; height:100%">' +
+					'<div class="fc-content">' +
+						(timeText ?
+							'<div class="fc-time"' +
+							' data-start="' + htmlEscape(startTimeText) + '"' +
+							' data-full="' + htmlEscape(fullTimeText) + '"' +
+							'>' +
+								'<span>' + htmlEscape(timeText) + '</span>' +
+							'</div>' :
+							''
+							) +
+						(event.title ?
+							'<div class="fc-title">' +
+								htmlEscape(event.title) +
+							'</div>' :
+							''
+							) +
+					'</div>' +
+					'<div class="fc-bg"/>' +
+					(isResizable ?
+						'<div class="fc-resizer"/>' :
 						''
 						) +
-					(event.title ?
-						'<div class="fc-title">' +
-							htmlEscape(event.title) +
-						'</div>' :
-						''
-						) +
-				'</div>' +
-				'<div class="fc-bg"/>' +
-				(isResizable ?
-					'<div class="fc-resizer"/>' :
-					''
-					) +
+				'</div>'+
 			'</a>';
 	},
 
